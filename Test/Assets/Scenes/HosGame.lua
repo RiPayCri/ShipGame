@@ -9,6 +9,7 @@ local bullets = require('Assets/Entities/Bullets')
 local Height, Width = love.graphics.getHeight(), love.graphics.getWidth()
 local Data, count = nil, 0
 local Bullets = {}
+local Properties = read:readProperties()
 
 local Game = {}
 
@@ -40,7 +41,15 @@ server:on('clientFire', function(data, client)
   b.x = data.x
   b.y = data.y
   b.v = data.v
+  if Properties.bulletCollision == true then
+    b.mask = bullets:addMask(b)
+  end
   table.insert(Bullets, b)
+end)
+server:on('connect', function(data, client)
+  server:sendToPeer(client, 'serverProps', {
+    Properties.bulletCollision
+  })
 end)
 
 --ExtraFunctions
@@ -64,7 +73,7 @@ function Game:update(dt)
   P:update(pl, dt)
   WallLoop(pl)
   if server:getClientCount() > 0 then
-    P:collisionPlayer(pl, Data)
+    P:collisionPlayer(pl, Data, Bullets, Properties)
   end
   if love.keyboard.isDown('space') then
     cliBullets = bullets:grabBullets()

@@ -64,7 +64,7 @@ function player:addValues(data, p)
   return data
 end
 
-function player:collisionPlayer(p, data)
+function player:collisionPlayer(p, data, bullets, props)
   if p.mask:collidesWith(data.mask) then
     if data.v ~= zeroVector and p.v ~= zeroVector then
       temp = data.v
@@ -73,6 +73,21 @@ function player:collisionPlayer(p, data)
       p.v = -p.v / 2
     elseif p.v == zeroVector then
       p.v = data.v
+    end
+  end
+  if props.bulletCollision == true then
+    for i,b in pairs(bullets) do
+      if p.mask:collidesWith(b.mask) then
+        if b.v ~= zeroVector and p.v ~= zeroVector then
+          temp = b.v
+          p.v = p.v:mirrorOn(temp)
+        elseif b.v == zeroVector then
+          p.v = -p.v / 2
+        elseif p.v == zeroVector then
+          p.v = data.v
+        end
+        table.remove(bullets, i)
+      end
     end
   end
 end

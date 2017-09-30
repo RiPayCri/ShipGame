@@ -13,6 +13,7 @@ local Game = {}
 local Data, clientTimer = nil, 30
 local cliBullets = nil
 local hostBullets = {}
+local Props = {}
 
 --Creates the Player
 local pl = P:create2(100, 100)
@@ -22,6 +23,9 @@ local count = 0
 local clientData = read:readClient()
 local client = sock.newClient(clientData.Address, clientData.Port)
 client:setSerialization(bitser.dumps, bitser.loads)
+client:setSchema('serverProps', {
+  'bulletCollision'
+})
 client:setSchema('hostData', {
   'x',
   'y',
@@ -47,11 +51,15 @@ client:on('connect', function(data)
   }
 )
 end)
+client:on('serverProps', function(data)
+  Props.bulletCollision = data.bulletCollision
+end)
 client:on('hostFire', function(data)
   b = {}
   b.x = data.x
   b.y = data.y
   b.v = data.v
+  b.mask = bullets:addMask(b)
   table.insert(hostBullets, b)
 end)
 client:connect()
@@ -96,7 +104,7 @@ function Game:update(dt)
       end
     end
     if Data ~= nil then
-      P:collisionPlayer(pl, Data)
+      P:collisionPlayer(pl, Data, hostBullets, Props)
     end
     if hostBullets ~= nil then
       bullets:update2(hostBullets, dt)

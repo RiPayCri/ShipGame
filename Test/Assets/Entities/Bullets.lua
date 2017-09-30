@@ -1,5 +1,6 @@
 --Reqs
 local vect = require('Assets/Tools/vector')
+local hc = require('Assets/Tools/HC')
 
 local Bullets = {}
 
@@ -12,6 +13,11 @@ end
 
 function Bullets:grabBullets()
   return bulletcontroller.bullets
+end
+
+function Bullets:addMask(bullet)
+  mask = hc.rectangle(bullet.x, bullet.y, 5, 5)
+  return mask
 end
 
 function Bullets:newBullet(t)
@@ -65,6 +71,7 @@ function Bullets:update2(data, dt)
   for _,b in pairs(data) do
     b.x = b.x + b.v.x * dt
     b.y = b.y + b.v.y * dt
+    b.mask:moveTo(b.x, b.y)
   end
 end
 

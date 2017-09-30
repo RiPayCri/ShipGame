@@ -20,7 +20,7 @@ end
 function Read:readClient()
   if io.open("Test/server.txt", "r") ~= nil then
     CliStuff = {}
-    file = io.open("Test/server.txt", r)
+    file = io.open("Test/server.txt", "r")
     for i = 1, 5 do
       empty = file:read()
     end
@@ -31,6 +31,26 @@ function Read:readClient()
     CliStuff.Port = tonumber(CliStuff.Port)
     io.close(file)
     return CliStuff
+  end
+end
+
+function Read:readProperties()
+  if io.open("Test/server.txt", "r") ~= nil then
+    Properties = {}
+    file = io.open("Test/server.txt", "r")
+    for i = 1, 9 do
+      empty = file:read()
+    end
+    Properties.bulletCollision = file:read()
+    Properties.bulletCollision = string.sub(Properties.bulletCollision, 20)
+    if Properties.bulletCollision == 'true' then
+      Properties.bulletCollision = true
+    elseif Properties.bulletCollision == 'false' then
+      Properties.bulletCollision = false
+    else
+      error("BulletCollision Property: not true or false")
+    end
+    return Properties
   end
 end
 
