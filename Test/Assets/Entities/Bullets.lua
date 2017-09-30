@@ -48,9 +48,12 @@ function Bullets:update(dt)
   end
 
   --Bullet movement
-  for _,b in pairs(bulletcontroller.bullets) do
+  for i,b in ipairs(bulletcontroller.bullets) do
     b.x = b.x + b.v.x * dt
     b.y = b.y + b.v.y * dt
+    if b.x > love.graphics.getWidth() or b.y > love.graphics.getHeight() or b.x < 0 or b.y < 0 then
+      table.remove(bulletcontroller.bullets, i)
+    end
   end
 end
 

@@ -79,14 +79,8 @@ function player:collisionPlayer(p, data, bullets, props)
   if props.bulletCollision == true then
     for i,b in pairs(bullets) do
       if p.mask:collidesWith(b.mask) then
-        if b.v ~= zeroVector and p.v ~= zeroVector then
-          temp = b.v
-          p.v = p.v:mirrorOn(temp)
-        elseif b.v == zeroVector then
-          p.v = -p.v / 2
-        elseif p.v == zeroVector then
-          p.v = data.v
-        end
+        temp = vect(b.v.x, b.v.y)
+        p.v = ((p.v * 0.5) + (temp * 0.0625)) / 2
         table.remove(bullets, i)
       end
     end

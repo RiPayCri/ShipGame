@@ -107,9 +107,11 @@ function Game:update(dt)
         end
       end
     end
-    if Data ~= nil then
+
+    if Data ~= nil and hostBullets ~= nil then
       P:collisionPlayer(pl, Data, hostBullets, Props)
     end
+
     if hostBullets ~= nil then
       bullets:update2(hostBullets, dt, Props)
     end

@@ -47,7 +47,7 @@ server:on('clientFire', function(data, client)
   table.insert(Bullets, b)
 end)
 server:on('connect', function(data, client)
-  server:sendToPeer(client, 'serverProps', {
+  server:sendToPeer(server:getPeerByIndex(1), 'serverProps', {
     Properties.bulletCollision
   })
 end)
