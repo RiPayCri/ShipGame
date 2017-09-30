@@ -1,0 +1,10 @@
+--HostComputer--
+Address: localhost
+Port: 22122
+
+--ServerConnection--
+Address: localhost
+Port: 22122
+
+--ServerProperties--
+CollidableBullets: true
