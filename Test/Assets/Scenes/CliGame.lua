@@ -59,7 +59,9 @@ client:on('hostFire', function(data)
   b.x = data.x
   b.y = data.y
   b.v = data.v
-  b.mask = bullets:addMask(b)
+  if Props.bulletCollision == true then
+    b.mask = bullets:addMask(b)
+  end
   table.insert(hostBullets, b)
 end)
 client:connect()
@@ -107,7 +109,7 @@ function Game:update(dt)
       P:collisionPlayer(pl, Data, hostBullets, Props)
     end
     if hostBullets ~= nil then
-      bullets:update2(hostBullets, dt)
+      bullets:update2(hostBullets, dt, Props)
     end
   end
   --Client Functions

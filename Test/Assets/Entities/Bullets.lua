@@ -66,12 +66,14 @@ function Bullets:draw2(data)
   end
 end
 
-function Bullets:update2(data, dt)
+function Bullets:update2(data, dt, prop)
   --Moves the other bullets
   for _,b in pairs(data) do
     b.x = b.x + b.v.x * dt
     b.y = b.y + b.v.y * dt
-    b.mask:moveTo(b.x, b.y)
+    if prop.bulletCollision == true then
+      b.mask:moveTo(b.x, b.y)
+    end
   end
 end
 

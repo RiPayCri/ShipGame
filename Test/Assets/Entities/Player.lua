@@ -28,6 +28,7 @@ function player:create()
   p.hhalf = (p.h * p.ratio) / 2
   p.mask = hc.polygon(p.x , p.y - p.hhalf, p.x - p.whalf, p.y + p.hhalf, p.x + p.whalf, p.y + p.hhalf)
   p.push = false
+  p.collisionTime = 20
   local g = anim8.newGrid(300, 318, p.image2:getWidth(), p.image2:getHeight())
   p.anim = anim8.newAnimation(g(1, '1-2'), 0.1)
   bullet:init()
@@ -52,6 +53,7 @@ function player:create2(x, y)
   p.hhalf = (p.h * p.ratio) / 2
   p.mask = hc.polygon(p.x , p.y - p.hhalf, p.x - p.whalf, p.y + p.hhalf, p.x + p.whalf, p.y + p.hhalf)
   p.push = false
+  p.collisionTime = 20
   local g = anim8.newGrid(300, 318, p.image2:getWidth(), p.image2:getHeight())
   p.anim = anim8.newAnimation(g(1, '1-2'), 0.1)
   bullet:init()
@@ -65,15 +67,10 @@ function player:addValues(data, p)
 end
 
 function player:collisionPlayer(p, data, bullets, props)
-  if p.mask:collidesWith(data.mask) then
-    if data.v ~= zeroVector and p.v ~= zeroVector then
-      temp = data.v
-      p.v = p.v:mirrorOn(temp)
-    elseif data.v == zeroVector then
-      p.v = -p.v / 2
-    elseif p.v == zeroVector then
-      p.v = data.v
-    end
+  if p.mask:collidesWith(data.mask) and p.collisionTime <= 0 then
+    temp = data.v
+    p.v = ((p.v * 0.5) + temp) / 2
+    p.collisionTime = 20
   end
   if props.bulletCollision == true then
     for i,b in pairs(bullets) do
@@ -94,6 +91,7 @@ end
 
 function player:update(p, dt)
   p.push = false
+  p.collisionTime = p.collisionTime - 1
 
   --Player Controls
   if love.keyboard.isDown('up') and p.v:len() <= 50 then

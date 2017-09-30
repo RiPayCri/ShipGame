@@ -103,7 +103,7 @@ function Game:update(dt)
   if server:getClientCount() > 0 then
     P:otherMove(Data, dt)
     if Bullets ~= {} then
-      bullets:update2(Bullets, dt)
+      bullets:update2(Bullets, dt, Properties)
     end
   end
 end

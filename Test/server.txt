@@ -7,4 +7,4 @@ Address: localhost
 Port: 22122
 
 --ServerProperties--
-CollidableBullets: true
+CollidableBullets: false
