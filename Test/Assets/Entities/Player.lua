@@ -10,6 +10,7 @@ local player = {}
 
 local zeroVector = vect(0,0)
 
+--Creates the player object
 function player:create()
   --Player values
   p = {}
@@ -35,6 +36,7 @@ function player:create()
   return p
 end
 
+--Secondary object to use for specific coord spawning
 function player:create2(x, y)
   --Player values
   p = {}
@@ -60,12 +62,14 @@ function player:create2(x, y)
   return p
 end
 
+--Server/client use, adds values to the objects
 function player:addValues(data, p)
   data.mask = hc.polygon(data.x , data.y - p.hhalf, data.x - p.whalf, data.y + p.hhalf, data.x + p.whalf, data.y + p.hhalf)
   data.anim = p.anim
   return data
 end
 
+--The collision system
 function player:collisionPlayer(p, data, bullets, props)
   if p.mask:collidesWith(data.mask) and p.collisionTime <= 0 then
     temp = data.v
@@ -134,6 +138,7 @@ function player:update(p, dt)
   bullet:update(dt)
 end
 
+--Other player movement
 function player:otherMove(data, dt)
   data.mask:moveTo(data.x, data.y)
   data.mask:setRotation(data.deg)

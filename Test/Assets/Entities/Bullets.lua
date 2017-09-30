@@ -4,6 +4,7 @@ local hc = require('Assets/Tools/HC')
 
 local Bullets = {}
 
+--Initializes the bullet collection object
 function Bullets:init()
   bulletcontroller = {}
   bulletcontroller.bullets = {}
@@ -11,15 +12,18 @@ function Bullets:init()
   ch = 1
 end
 
+--Grabs the current list of bullets
 function Bullets:grabBullets()
   return bulletcontroller.bullets
 end
 
+--Adds a mask to new bullets
 function Bullets:addMask(bullet)
   mask = hc.rectangle(bullet.x, bullet.y, 5, 5)
   return mask
 end
 
+--Creates new bullets
 function Bullets:newBullet(t)
   bullet = {}
   if math.mod(t, 2) == 1 then

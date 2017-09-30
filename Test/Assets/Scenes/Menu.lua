@@ -1,3 +1,4 @@
+--Local Variables
 local Menu = {}
 
 local box = love.graphics.newImage('Assets/Images/Box.png')
@@ -24,6 +25,7 @@ local clickTime = 15
 function Menu:update(dt)
   timer = timer - 1
   clickTime = clickTime - 1
+  --Key movement detection for the menu
   if love.keyboard.isDown('up') and timer <= 0 then
     current = current - 1
     timer = 15
@@ -32,6 +34,7 @@ function Menu:update(dt)
     timer = 15
   end
 
+  --Tells what the currently highlighted menu item is
   if not picked then
     if current < 1 then
       current = table.getn(choices)
@@ -46,6 +49,7 @@ function Menu:update(dt)
     end
   end
 
+  --Checks for input for a menu item
   if love.keyboard.isDown('return') and clickTime <= 0 then
     clickTime = 15
     if not picked then
@@ -71,6 +75,7 @@ function Menu:update(dt)
 end
 
 function Menu:draw()
+  --Draws the menu
   if not picked then
     for i,v in ipairs(choices) do
       if current == i then

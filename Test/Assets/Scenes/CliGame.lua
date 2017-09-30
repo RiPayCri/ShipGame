@@ -91,6 +91,8 @@ function Game:update(dt)
 
   P:update(pl, dt)
   WallLoop(pl)
+
+  --Player/Client Functions
   if client:isConnected() then
     if love.keyboard.isDown('space') then
       cliBullets = bullets:grabBullets()
@@ -112,6 +114,7 @@ function Game:update(dt)
       bullets:update2(hostBullets, dt, Props)
     end
   end
+
   --Client Functions
   client:send('playerData', {
     pl.x,
@@ -139,6 +142,7 @@ function Game:draw()
     P:clidraw(pl, Data)
   end
 
+  --Draws the host's bullets
   if hostBullets ~= nil then
     bullets:draw2(hostBullets)
   end

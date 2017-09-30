@@ -1,5 +1,7 @@
+--Local reqs
 local P = require('Assets/Entities/Player')
 
+--Local Variables
 local Height, Width = love.graphics.getHeight(), love.graphics.getWidth()
 
 local Game = {}

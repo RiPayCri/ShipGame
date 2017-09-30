@@ -72,6 +72,8 @@ function Game:update(dt)
   --Player Functions
   P:update(pl, dt)
   WallLoop(pl)
+
+  --Server/Player Functions
   if server:getClientCount() > 0 then
     P:collisionPlayer(pl, Data, Bullets, Properties)
   end
@@ -99,7 +101,7 @@ function Game:update(dt)
   })
   server:update()
 
-  --Bullet update
+  --Bullet and client update
   if server:getClientCount() > 0 then
     P:otherMove(Data, dt)
     if Bullets ~= {} then
@@ -115,7 +117,7 @@ function Game:draw()
   --Draws the amount of clients that are connected
   love.graphics.print(server:getClientCount(), 10, 10)
 
-  --Draws connected players
+  --Draws connected players and bullets
   if server:getClientCount() > 0 then
     P:clidraw(p, Data)
     if Bullets ~= {} then

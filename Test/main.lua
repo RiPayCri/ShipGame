@@ -14,9 +14,11 @@ function love.load()
 end
 
 function love.update(dt)
+  --Updates the current scene
   currentScene:update(dt)
 end
 
 function love.draw()
+  --Draws the current scene
   currentScene:draw()
 end
