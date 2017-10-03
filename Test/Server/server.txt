@@ -1,8 +1,4 @@
---HostComputer--
-Address: localhost
-Port: 22122
-
---ServerConnection--
+--Server--
 Address: localhost
 Port: 22122
 
