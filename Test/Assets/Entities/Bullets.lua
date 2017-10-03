@@ -59,7 +59,7 @@ end
 
 function Bullets:draw()
   --Draws in the bullets
-  for _,b in pairs(bulletcontroller.bullets) do
+  for i,b in ipairs(bulletcontroller.bullets) do
     love.graphics.setColor(255, 255, 255)
     love.graphics.rectangle('fill', b.x, b.y, b.s, b.s)
   end
@@ -67,7 +67,7 @@ end
 
 function Bullets:draw2(data)
   --Draws other bullets
-  for _,b in pairs(data) do
+  for i,b in ipairs(data) do
     love.graphics.setColor(255, 255, 255)
     love.graphics.rectangle('fill', b.x, b.y, 5, 5)
   end
@@ -75,7 +75,7 @@ end
 
 function Bullets:update2(data, dt, prop)
   --Moves the other bullets
-  for _,b in pairs(data) do
+  for i,b in ipairs(data) do
     b.x = b.x + b.v.x * dt
     b.y = b.y + b.v.y * dt
     if prop.bulletCollision == true then

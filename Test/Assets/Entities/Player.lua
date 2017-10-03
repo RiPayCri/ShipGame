@@ -77,7 +77,7 @@ function player:collisionPlayer(p, data, bullets, props)
     p.collisionTime = 20
   end
   if props.bulletCollision == true then
-    for i,b in pairs(bullets) do
+    for i,b in ipairs(bullets) do
       if p.mask:collidesWith(b.mask) then
         temp = vect(b.v.x, b.v.y)
         p.v = ((p.v * 0.5) + (temp * 0.0625)) / 2
