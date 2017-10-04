@@ -10,43 +10,18 @@ local player = {}
 
 local zeroVector = vect(0,0)
 
---Creates the player object
+--The player spawn function
 function player:create()
   --Player values
   p = {}
+  p.id = love.math.random(2000)
   p.image = love.graphics.newImage('Assets/Images/Ship.png')
   p.image2 = love.graphics.newImage('Assets/Images/ShipAnim.png')
   p.w = p.image:getWidth()
   p.h = p.image:getHeight()
   p.ratio = 1/6
-  p.x = Width / 2 - p.w * p.ratio * 0.5
-  p.y = Height / 2 - p.h * p.ratio * 0.5
-  p.v = vect(0, 0)
-  p.acc = 10
-  p.max = 200
-  p.deg = 0
-  p.whalf = (p.w * p.ratio) / 2
-  p.hhalf = (p.h * p.ratio) / 2
-  p.mask = hc.polygon(p.x , p.y - p.hhalf, p.x - p.whalf, p.y + p.hhalf, p.x + p.whalf, p.y + p.hhalf)
-  p.push = false
-  p.collisionTime = 20
-  local g = anim8.newGrid(300, 318, p.image2:getWidth(), p.image2:getHeight())
-  p.anim = anim8.newAnimation(g(1, '1-2'), 0.1)
-  bullet:init()
-  return p
-end
-
---Secondary object to use for specific coord spawning
-function player:create2(x, y)
-  --Player values
-  p = {}
-  p.image = love.graphics.newImage('Assets/Images/Ship.png')
-  p.image2 = love.graphics.newImage('Assets/Images/ShipAnim.png')
-  p.w = p.image:getWidth()
-  p.h = p.image:getHeight()
-  p.ratio = 1/6
-  p.x = x
-  p.y = y
+  p.x = love.math.random(love.graphics.getWidth())
+  p.y = love.math.random(love.graphics.getHeight())
   p.v = vect(0, 0)
   p.acc = 10
   p.max = 200

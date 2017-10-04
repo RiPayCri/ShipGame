@@ -10,14 +10,35 @@ local Height, Width = love.graphics.getHeight(), love.graphics.getWidth()
 
 local Game = {}
 
---Creates the Player
-local pl = P:create2(love.math.random(Width), love.math.random(Height))
+--Creates the Player and Players
+local pl = P:create()
+local Players = {}
+local tempdata = nil
 
---Client and functions
-cliStuff = read:readClient()
-client = sock.newClient(cliStuff.Address, cliStuff.Port)
+--Server stuff
+clientstuff = read:readClient()
+local client = sock.newClient(clientstuff.Address, clientstuff.Port)
 client:setSerialization(bitser.dumps, bitser.loads)
 client:connect()
+
+--Client data
+client:setSchema('Playersdata', {
+  'id',
+  'x',
+  'y',
+  'v',
+  'deg',
+  'push'
+})
+
+client:on('Playersdata', function(data)
+  if Players["Player" .. data.id] ~= nil then
+    Players["Player" .. data.id] = data
+  else
+    Players["Player" .. data.id] = {}
+  end
+  tempdata = data.id
+end)
 
 --ExtraFunctions
 --Loops the player around the map
@@ -42,11 +63,38 @@ function Game:update(dt)
 
   --Client functions
   client:update()
+  client:send('Playerdata', {
+    pl.id,
+    pl.x,
+    pl.y,
+    pl.v,
+    pl.deg,
+    pl.push
+  })
+
+  --updates the other players
+  if table.getn(Players) > 0 then
+    for _,v in pairs(Players) do
+      P:otherMove(v, dt)
+    end
+  end
 end
 
 function Game:draw()
   --Draws the Player
   P:draw(pl)
+
+
+  --Draws the other Players
+  if table.getn(Players) > 0 then
+    for _,v in pairs(Players) do
+      P:clidraw(pl, v)
+    end
+  end
+
+  if tempdata ~= nil then
+    love.graphics.print(tempdata, 10, 10)
+  end
 end
 
 return Game
