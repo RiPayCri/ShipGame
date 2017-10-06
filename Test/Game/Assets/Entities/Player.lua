@@ -14,7 +14,6 @@ local zeroVector = vect(0,0)
 function player:create()
   --Player values
   p = {}
-  p.id = love.math.random(2000)
   p.image = love.graphics.newImage('Assets/Images/Ship.png')
   p.image2 = love.graphics.newImage('Assets/Images/ShipAnim.png')
   p.w = p.image:getWidth()

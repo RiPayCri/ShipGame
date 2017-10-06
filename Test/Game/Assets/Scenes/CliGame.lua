@@ -19,25 +19,30 @@ local tempdata = nil
 clientstuff = read:readClient()
 local client = sock.newClient(clientstuff.Address, clientstuff.Port)
 client:setSerialization(bitser.dumps, bitser.loads)
-client:connect()
 
---Client data
+--The data that is recieved from the server
 client:setSchema('Playersdata', {
   'id',
-  'x',
-  'y',
-  'v',
-  'deg',
-  'push'
+  'data'
 })
 
+client:connect()
+
+--The initial data sent upon connection to the server
+client:on('connect', function(data)
+  client:send('Playerdata', {
+    pl.x,
+    pl.y,
+    pl.deg,
+    pl.push
+  })
+end)
+
+--Player data that is recieved from the server
 client:on('Playersdata', function(data)
-  if Players["Player" .. data.id] ~= nil then
-    Players["Player" .. data.id] = data
-  else
-    Players["Player" .. data.id] = {}
-  end
-  tempdata = data.id
+  Data = data.data
+  Data = P:addValues(Data, pl)
+  Players[data.id] = Data
 end)
 
 --ExtraFunctions
@@ -63,11 +68,11 @@ function Game:update(dt)
 
   --Client functions
   client:update()
-  client:send('Playerdata', {
-    pl.id,
+
+  --The data that is sent to the server
+  client:send('Playerdata',{
     pl.x,
     pl.y,
-    pl.v,
     pl.deg,
     pl.push
   })
@@ -87,13 +92,9 @@ function Game:draw()
 
   --Draws the other Players
   if table.getn(Players) > 0 then
-    for _,v in pairs(Players) do
+    for i,v in ipairs(Players) do
       P:clidraw(pl, v)
     end
-  end
-
-  if tempdata ~= nil then
-    love.graphics.print(tempdata, 10, 10)
   end
 end
 
