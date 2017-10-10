@@ -29,6 +29,7 @@ server:setSchema('Playerdata', {
 --When a client connects to the server, this text is printed to the screen.
 server:on('connect', function(data, client)
   table.insert(logs, 1, string.format("Client %s has joined the server", client:getIndex()))
+
 end)
 
 --When a client disconnects from the server, this text is displayed
@@ -38,7 +39,7 @@ end)
 
 --The actual data recieved and sent from and to the clients
 server:on('Playerdata', function(data, client)
-  server:sendToAllBut(client, 'Playersdata', {
+  server:sendToAll('Playersdata', {
     client:getIndex(),
     data
   })

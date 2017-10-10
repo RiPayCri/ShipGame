@@ -79,7 +79,7 @@ function Game:update(dt)
 
   --updates the other players
   if table.getn(Players) > 0 then
-    for _,v in pairs(Players) do
+    for i,v in ipairs(Players) do
       P:otherMove(v, dt)
     end
   end
@@ -93,7 +93,7 @@ function Game:draw()
   --Draws the other Players
   if table.getn(Players) > 0 then
     for i,v in ipairs(Players) do
-      P:clidraw(pl, v)
+      P:clidraw(pl, Players[i])
     end
   end
 end
