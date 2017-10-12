@@ -19,6 +19,7 @@ local tempdata = nil
 clientstuff = read:readClient()
 local client = sock.newClient(clientstuff.Address, clientstuff.Port)
 client:setSerialization(bitser.dumps, bitser.loads)
+Ident = nil
 
 --The data that is recieved from the server
 client:setSchema('Playersdata', {
@@ -38,11 +39,21 @@ client:on('connect', function(data)
   })
 end)
 
+client:on('Identification', function(id)
+  Ident = id
+end)
+
 --Player data that is recieved from the server
 client:on('Playersdata', function(data)
   Data = data.data
   Data = P:addValues(Data, pl)
-  Players[data.id] = Data
+
+  if not (Ident == data.id) then
+    print('Things are happening')
+    Players[data.id] = Data
+  else
+    print('Things are not happening')
+  end
 end)
 
 --ExtraFunctions
