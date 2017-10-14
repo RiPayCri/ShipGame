@@ -61,6 +61,12 @@ function player:collisionPlayer(p, data, bullets, props)
   end
 end
 
+--Grabs bullets related to this player
+function player:grabBullets()
+  bullets = bullet:grabBullets()
+  return bullets
+end
+
 function player:update(p, dt)
   p.push = false
   p.collisionTime = p.collisionTime - 1

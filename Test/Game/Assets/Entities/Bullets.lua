@@ -19,7 +19,7 @@ end
 
 --Adds a mask to new bullets
 function Bullets:addMask(bullet)
-  mask = hc.rectangle(bullet.x, bullet.y, 5, 5)
+  mask = hc.point(bullet.x, bullet.y)
   return mask
 end
 
@@ -35,6 +35,7 @@ function Bullets:newBullet(t)
   end
   bullet.v = vect(p.v.x * 2 + math.sin(p.deg) * 150, p.v.y * 2 - math.cos(p.deg) * 150)
   bullet.s = 5
+  bullet.mask = hc.point(bullet.x, bullet.y)
   table.insert(bulletcontroller.bullets, bullet)
 end
 
@@ -51,6 +52,7 @@ function Bullets:update(dt)
   for i,b in ipairs(bulletcontroller.bullets) do
     b.x = b.x + b.v.x * dt
     b.y = b.y + b.v.y * dt
+    b.mask:moveTo(b.x, b.y)
     if b.x > love.graphics.getWidth() or b.y > love.graphics.getHeight() or b.x < 0 or b.y < 0 then
       table.remove(bulletcontroller.bullets, i)
     end

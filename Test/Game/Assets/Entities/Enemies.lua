@@ -1,6 +1,11 @@
 local vect = require('Assets/Tools/vector')
+local HC = require('Assets/Tools/HC')
+local anim = require('Assets/Tools/anim8')
 
 local Enemies = {}
+
+local delay = 30
+local delayt = 30
 
 function Enemies:initializeAsteroids()
   enemycontroller = {}
@@ -9,7 +14,7 @@ function Enemies:initializeAsteroids()
 end
 
 function Enemies:createAsteroids(list, level)
-  speed = level * 50
+  speed = (level * 50) * math.log10((level * level) + 1)
 
   for i = 1, level * 5 do
     asteroid = {}
@@ -20,6 +25,12 @@ function Enemies:createAsteroids(list, level)
     asteroid.h = asteroid.image:getHeight()
     asteroid.w = asteroid.image:getWidth()
     asteroid.ratio = 1
+    asteroid.mask = HC.rectangle(asteroid.x, asteroid.y, asteroid.w, asteroid.h)
+    asteroid.animimage = love.graphics.newImage('Assets/Images/AsteroidAnim.png')
+    asteroid.g = anim.newGrid(32, 32, asteroid.animimage:getWidth(), asteroid.animimage:getHeight())
+    asteroid.anim = anim.newAnimation(asteroid.g(1, '1-6'), 0.15)
+    asteroid.destroyed = false
+    asteroid.dtimer = 50
     table.insert(list, asteroid)
   end
 end
@@ -28,13 +39,49 @@ function Enemies:update(enemies, dt)
   for i,enemy in ipairs(enemies) do
     enemy.x = enemy.x + enemy.v.x * dt
     enemy.y = enemy.y + enemy.v.y * dt
+    enemy.mask:moveTo(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2)
+
+    if enemy.destroyed then
+      enemy.dtimer = enemy.dtimer - 1
+      enemy.anim:update(dt)
+      if enemy.dtimer <= 0 then
+        table.remove(enemies, i)
+      end
+    end
   end
 end
 
+function Enemies:checkRespawn(level, enemies)
+  if table.getn(enemies) <= 0 then
+    level = level + 1
+    Enemies:createAsteroids(enemies, level)
+  end
+  return level
+end
+
+
 function Enemies:draw(enemies)
   for i,enemy in ipairs(enemies) do
-    love.graphics.draw(enemy.image, enemy.x, enemy.y)
+    if not enemy.destroyed then
+      love.graphics.draw(enemy.image, enemy.x, enemy.y)
+    else
+      enemy.anim:draw(enemy.animimage, enemy.x, enemy.y)
+    end
   end
+end
+
+function Enemies:checkCollision(enemies, bullets, score)
+  for i,enemy in ipairs(enemies) do
+    for x,bullet in ipairs(bullets) do
+      if enemy.mask:collidesWith(bullet.mask) then
+        enemy.destroyed = true
+        score = score + 100
+        table.remove(bullets, x)
+      end
+    end
+  end
+
+  return score
 end
 
 return Enemies

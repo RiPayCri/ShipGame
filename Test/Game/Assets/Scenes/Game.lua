@@ -4,7 +4,9 @@ local Eni = require('Assets/Entities/Enemies')
 
 --Local Variables
 local Height, Width = love.graphics.getHeight(), love.graphics.getWidth()
-local level = 5
+local level = 1
+local score = 0
+local leveltxt, scoretxt = string.format('level %d', level), string.format('score: %d', score)
 
 local Game = {}
 
@@ -34,15 +36,26 @@ function Game:update(dt)
 
   Eni:update(asteroids, dt)
 
+  bullets = P:grabBullets()
+
+  score = Eni:checkCollision(asteroids, bullets, score)
+  level = Eni:checkRespawn(level, asteroids)
+
   for i,a in ipairs(asteroids) do
     WallLoop(a)
   end
+
+  leveltxt = string.format('level %d', level)
+  scoretxt = string.format('score: %d', score)
 end
 
 function Game:draw()
   P:draw(p)
 
   Eni:draw(asteroids)
+
+  love.graphics.printf(leveltxt, 10, 10, 100)
+  love.graphics.printf(scoretxt, Width - 80, 10, 80)
 end
 
 return Game
