@@ -14,9 +14,9 @@ function Enemies:initializeAsteroids()
 end
 
 function Enemies:createAsteroids(list, level)
-  speed = (level * 50) * math.log10((level * level) + 1)
+  speed = (level * 15) * math.log10((level * level) + 1)
 
-  for i = 1, level * 5 do
+  for i = 1, level * 3 do
     asteroid = {}
     asteroid.x = love.math.random(love.graphics.getWidth())
     asteroid.y = love.math.random(love.graphics.getHeight())

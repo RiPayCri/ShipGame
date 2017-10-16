@@ -9,13 +9,15 @@ local score = 0
 local shots = 0
 _G.shots = 0
 _G.score = 0
+local pausecounter = 30
 local leveltxt, scoretxt = string.format('level %d', level), string.format('score: %d', score)
 
+--Creation of the Game object
 local Game = {}
 
+--Entity initialization
 local pl = P:create()
 local asteroids = Eni:initializeAsteroids()
-
 Eni:createAsteroids(asteroids, level)
 
 --ExtraFunctions
@@ -34,26 +36,40 @@ function WallLoop(obj)
 end
 
 function Game:update(dt)
+  --Updates the player and its collisions
   P:update(p, dt)
   WallLoop(p)
   P:collisionAsteroid(p, asteroids)
 
+  --Updates the global variables
   _G.shots = P:trackShots()
   _G.score = score
 
+  --Updates the asteroids
   Eni:update(asteroids, dt)
 
-  bullets = P:grabBullets()
-
-  score = Eni:checkCollision(asteroids, bullets, score)
-  level = Eni:checkRespawn(level, asteroids)
-
+  --Asteroid looping
   for i,a in ipairs(asteroids) do
     WallLoop(a)
   end
 
+  --Grabs the bullets to check for collisions
+  bullets = P:grabBullets()
+
+  --Leveling and scoring
+  score = Eni:checkCollision(asteroids, bullets, score)
+  level = Eni:checkRespawn(level, asteroids)
   leveltxt = string.format('level %d', level)
   scoretxt = string.format('score: %d', score)
+
+  --Pauseing
+  pausecounter = pausecounter - 1
+  if love.keyboard.isDown('escape') and pausecounter <= 0 then
+    pausecounter = 30
+    local Pause = require('Assets/Scenes/Pause')
+    currentScene = Pause
+  end
+
 end
 
 function Game:draw()

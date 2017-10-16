@@ -103,10 +103,6 @@ function player:update(p, dt)
     p.push = true
   end
 
-  if love.keyboard.isDown('escape') then
-    love.event.quit()
-  end
-
   if p.push then
     p.anim:update(dt)
   end
