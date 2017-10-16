@@ -61,6 +61,15 @@ function player:collisionPlayer(p, data, bullets, props)
   end
 end
 
+function player:collisionAsteroid(p, asteroids)
+  for i,a in ipairs(asteroids) do
+    if p.mask:collidesWith(a.mask) then
+      local Over = require('Assets/Scenes/GameOver')
+      currentScene = Over
+    end
+  end
+end
+
 --Grabs bullets related to this player
 function player:grabBullets()
   bullets = bullet:grabBullets()
@@ -110,6 +119,11 @@ function player:update(p, dt)
 
   --Bulletstuff
   bullet:update(dt)
+end
+
+function player:trackShots()
+  shots = bullet:grabShots()
+  return shots
 end
 
 --Other player movement

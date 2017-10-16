@@ -31,6 +31,10 @@ function Enemies:createAsteroids(list, level)
     asteroid.anim = anim.newAnimation(asteroid.g(1, '1-6'), 0.15)
     asteroid.destroyed = false
     asteroid.dtimer = 50
+    asteroid.id = "asteroid"
+    asteroid.rad = 0
+    asteroid.rspeed = love.math.random(10)
+    asteroid.audio = love.audio.newSource('Assets/Audio/Explosion.wav', 'static')
     table.insert(list, asteroid)
   end
 end
@@ -48,6 +52,11 @@ function Enemies:update(enemies, dt)
         table.remove(enemies, i)
       end
     end
+
+    if enemy.id == "asteroid" then
+      enemy.rad = enemy.rad + enemy.rspeed * dt
+      enemy.mask:setRotation(enemy.rad)
+    end
   end
 end
 
@@ -63,7 +72,7 @@ end
 function Enemies:draw(enemies)
   for i,enemy in ipairs(enemies) do
     if not enemy.destroyed then
-      love.graphics.draw(enemy.image, enemy.x, enemy.y)
+      love.graphics.draw(enemy.image, enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, enemy.rad, enemy.ratio, enemy.ratio, enemy.w / 2, enemy.h / 2)
     else
       enemy.anim:draw(enemy.animimage, enemy.x, enemy.y)
     end
@@ -76,11 +85,11 @@ function Enemies:checkCollision(enemies, bullets, score)
       if enemy.mask:collidesWith(bullet.mask) then
         enemy.destroyed = true
         score = score + 100
+        enemy.audio:play()
         table.remove(bullets, x)
       end
     end
   end
-
   return score
 end
 

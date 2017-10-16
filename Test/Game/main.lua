@@ -10,6 +10,13 @@ love.graphics.setDefaultFilter('nearest', 'nearest')
 currentScene = Menu
 choice = nil
 
+--Global values
+_G = {}
+_G.shots = 0
+_G.score = 0
+_G.w = Width
+_G.h = Height
+
 function love.load()
 end
 

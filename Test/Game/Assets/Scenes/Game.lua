@@ -6,6 +6,9 @@ local Eni = require('Assets/Entities/Enemies')
 local Height, Width = love.graphics.getHeight(), love.graphics.getWidth()
 local level = 1
 local score = 0
+local shots = 0
+_G.shots = 0
+_G.score = 0
 local leveltxt, scoretxt = string.format('level %d', level), string.format('score: %d', score)
 
 local Game = {}
@@ -33,6 +36,10 @@ end
 function Game:update(dt)
   P:update(p, dt)
   WallLoop(p)
+  P:collisionAsteroid(p, asteroids)
+
+  _G.shots = P:trackShots()
+  _G.score = score
 
   Eni:update(asteroids, dt)
 

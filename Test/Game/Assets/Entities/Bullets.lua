@@ -10,6 +10,7 @@ function Bullets:init()
   bulletcontroller.bullets = {}
   bulletT = 15
   ch = 1
+  bulletcount = 0
 end
 
 --Grabs the current list of bullets
@@ -36,7 +37,14 @@ function Bullets:newBullet(t)
   bullet.v = vect(p.v.x * 2 + math.sin(p.deg) * 150, p.v.y * 2 - math.cos(p.deg) * 150)
   bullet.s = 5
   bullet.mask = hc.point(bullet.x, bullet.y)
+  bullet.audio = love.audio.newSource('Assets/Audio/Laser.wav', 'static')
+  bullet.audio:play()
+  bulletcount = bulletcount + 1
   table.insert(bulletcontroller.bullets, bullet)
+end
+
+function Bullets:grabShots()
+  return bulletcount
 end
 
 function Bullets:update(dt)
